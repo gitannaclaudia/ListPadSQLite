@@ -3,6 +3,7 @@ package br.edu.ifsp.scl.listpad.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.TextView
 import br.edu.ifsp.scl.listpad.R
@@ -17,7 +18,7 @@ class DetalheActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalhe)
 
-        shoppingListID = this.intent.getStringExtra("shoppingListID") as String
+        shoppingListID = this.intent.getStringExtra("shoppinglistID") as String
 
         db.collection("shoppinglist").document(shoppingListID)
             .addSnapshotListener { value, error ->
@@ -37,6 +38,10 @@ class DetalheActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_detalhe, menu)
-        return super.onCreateOptionsMenu(menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
     }
 }

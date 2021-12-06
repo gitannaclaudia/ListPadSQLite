@@ -6,7 +6,6 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
@@ -16,6 +15,7 @@ import br.edu.ifsp.scl.listpad.model.ShoppingList
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CadastroActivity : AppCompatActivity() {
     private var activityCadastroBinding: ActivityCadastroBinding? = null
@@ -75,7 +75,7 @@ class CadastroActivity : AppCompatActivity() {
         val descricao = findViewById<EditText>(R.id.etDescricao).text.toString()
         val data = findViewById<EditText>(R.id.etData).text.toString()
 
-        val list = ShoppingList( nome, descricao, data)
+        val list = ShoppingList( nome, descricao, data, ArrayList())
         db.collection("shoppinglist").add(list)
     }
 

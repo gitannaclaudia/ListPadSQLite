@@ -22,4 +22,6 @@
     <string name="voltar">Voltar</string>
     <string name="editar">Editar</string>
     <string name="deletar">Deletar</string>
+    <string name="item">ITEM:</string>
+    <string name="items_da_lista">ITEMS DA LISTA:</string>
 </resources>
