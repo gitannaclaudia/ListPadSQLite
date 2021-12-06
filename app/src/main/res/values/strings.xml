@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Lista de Compras</string>
+    <string name="app_title">Listas de Compras</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="adicionar_nova_lista">Adicionar nova lista</string>
+    <string name="adicionar_lista">Adicionar Lista</string>
+    <string name="busca">Busca</string>
+    <string name="salvar">Salvar</string>
+    <string name="selecione_uma_data">Selecione uma data</string>
+    <string name="pr_ximo">Próximo</string>
+    <string name="nome_da_lista">NOME DA LISTA:</string>
+    <string name="descri_o">DESCRIÇÃO:</string>
+    <string name="data">DATA:</string>
+    <string name="voltar">Voltar</string>
+    <string name="editar">Editar</string>
+    <string name="deletar">Deletar</string>
+</resources>

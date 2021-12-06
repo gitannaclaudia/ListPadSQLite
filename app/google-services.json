@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "911084290899",
+    "project_id": "shoppignlist",
+    "storage_bucket": "shoppignlist.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911084290899:android:bd7af13b714494f53bd7a6",
+        "android_client_info": {
+          "package_name": "br.edu.ifsp.scl.listpad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911084290899-bphrgd4tmhk2bh53gp42o8nfskpm9bmf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSzIBqkyNv_lvexgk_wdeoAMHD6s_Epls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911084290899-bphrgd4tmhk2bh53gp42o8nfskpm9bmf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
