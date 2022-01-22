@@ -1,40 +1,58 @@
 package br.edu.ifsp.scl.listpad.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ListView
+import android.widget.*
+import br.edu.ifsp.scl.listpad.Data.DatabaseHelper
+import br.edu.ifsp.scl.listpad.Data.ItemListAdapter
 import br.edu.ifsp.scl.listpad.R
 import br.edu.ifsp.scl.listpad.databinding.ActivityCadastroItemsBinding
 import br.edu.ifsp.scl.listpad.model.ShoppingList
-import com.google.firebase.firestore.FirebaseFirestore
 
-abstract class CadastroItemsActivity : AppCompatActivity() {
-    private val activityCadastroItemsBinding: ActivityCadastroItemsBinding by lazy {
-        ActivityCadastroItemsBinding.inflate(layoutInflater)
-    }
-    // Data source
-    private val itemsList: MutableList<String> = mutableListOf()
-
-    // Adapter
-    private val itemsAdapter: ArrayAdapter<String> =
-        ArrayAdapter(this, android.R.layout.simple_list_item_1, itemsList.run {
-            val itemsStringList = mutableListOf<String>()
-            this.forEach { item -> itemsStringList.add(item.toString()) }
-            itemsStringList
-        })
+class CadastroItemsActivity : AppCompatActivity() {
+    private lateinit var activityCadastroItemsBinding: ActivityCadastroItemsBinding
+    private var itemsList: MutableList<String> = mutableListOf()
+    private var shoppingList = ShoppingList()
+    private val db = DatabaseHelper(this)
+    lateinit var itemListAdapter: ItemListAdapter
+    var itemsStringList = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activityCadastroItemsBinding = ActivityCadastroItemsBinding.inflate(layoutInflater)
         setContentView(activityCadastroItemsBinding.root)
 
-        initItemsList()
+        shoppingList = this.intent.getSerializableExtra("shoppinglist") as ShoppingList
 
-        activityCadastroItemsBinding.listview.adapter = itemsAdapter
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+        setSupportActionBar(toolbar)
+
+        if (this.intent.hasExtra("shoppinglist")) {
+            val nome = activityCadastroItemsBinding.nomeTv
+            val descricao = activityCadastroItemsBinding.descricaoTv
+            val data = activityCadastroItemsBinding.dataTv
+
+            nome.text = shoppingList.nome
+            descricao.text = shoppingList.descricao
+            data.text = shoppingList.data
+        }
+
+        val list = ShoppingList(null, shoppingList.nome, shoppingList.descricao, shoppingList.data, shoppingList.items)
+
+        toolbar.setNavigationOnClickListener(View.OnClickListener {
+            val intent = Intent(applicationContext, CadastroActivity::class.java)
+            intent.putExtra("shoppinglist", list)
+            startActivity(intent)
+        })
+
+        itemsStringList = shoppingList.items
+
+        initItemsList(itemsStringList)
     }
 
     fun imageButtonOnClick(view: View) {
@@ -42,30 +60,52 @@ abstract class CadastroItemsActivity : AppCompatActivity() {
         val listItem = findViewById<ListView>(R.id.listview)
         itemsList.add(item.text.toString())
         item.text.clear()
+
+        val itemsAdapter: ArrayAdapter<String> =
+            ArrayAdapter(this, R.layout.itemlist_celula, R.id.itemTv, itemsList.run {
+                this.forEach { item -> itemsStringList.add(item.toString()) }
+                itemsStringList
+            })
+
+        activityCadastroItemsBinding.listview.adapter = itemsAdapter
+
+        initItemsList(itemsStringList)
     }
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_cadastro, menu)
-        return true
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId==R.id.action_salvarContato) {
-            val db = FirebaseFirestore.getInstance()
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        if (item.itemId==R.id.action_salvarLista) {
+            val nome = activityCadastroItemsBinding.nomeTv.text.toString()
+            val descricao = activityCadastroItemsBinding.descricaoTv.text.toString()
+            val data = activityCadastroItemsBinding.dataTv.text.toString()
+            val list = ShoppingList(shoppingList.id, nome, descricao, data, itemsStringList)
 
-            val nome = findViewById<EditText>(R.id.etNome).text.toString()
-            val descricao = findViewById<EditText>(R.id.etDescricao).text.toString()
-            val data = findViewById<EditText>(R.id.etData).text.toString()
-            val list = ShoppingList(nome, descricao, data, itemsList)
-            db.collection("shoppinglist").add(list)
+            db.atualizarLista(list)
+
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(intent)
+            Toast.makeText(applicationContext, "Lista Atualizada", Toast.LENGTH_LONG).show()
         }
+
+        toolbar.setNavigationOnClickListener(View.OnClickListener {
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(intent)
+        })
+
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initItemsList() {
-        for (indice in 1..100) {
-            itemsList.add("$indice")
+    private fun initItemsList(list: MutableList<String>) {
+        for (indice in list) {
+            itemsList.add(indice)
         }
     }
+
+
 }

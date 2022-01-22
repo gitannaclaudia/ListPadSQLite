@@ -1,25 +1,29 @@
 package br.edu.ifsp.scl.listpad.activity
 
+import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import br.edu.ifsp.scl.listpad.Data.DatabaseHelper
 import br.edu.ifsp.scl.listpad.R
-import br.edu.ifsp.scl.listpad.adapter.ShoppingListAdapter
+import br.edu.ifsp.scl.listpad.Data.ShoppingListAdapter
 import br.edu.ifsp.scl.listpad.model.ShoppingList
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 
 
 class MainActivity : AppCompatActivity() {
 
+    val db = DatabaseHelper(this)
+    var listaLista = ArrayList<ShoppingList>()
     lateinit var shoppingListAdapter: ShoppingListAdapter
+    private lateinit var permissaoListaArl: ActivityResultLauncher<Array<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,14 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, CadastroActivity::class.java)
             startActivity(intent)
         }
+
+        permissaoListaArl = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissoes ->
+            if (permissoes.containsValue(false)) {
+                requisitarPermissaoListas()
+            } else {
+                updateUI()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -43,7 +55,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         updateUI()
-        shoppingListAdapter.startListening()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -62,12 +73,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        val db = FirebaseFirestore.getInstance()
-        val query: Query = db.collection("shoppinglist").orderBy("nome")
-        val options: FirestoreRecyclerOptions<ShoppingList> = FirestoreRecyclerOptions.Builder<ShoppingList>()
-            .setQuery(query, ShoppingList::class.java).build()
 
-        shoppingListAdapter = ShoppingListAdapter(options)
+        listaLista = db.listarListas()
+        shoppingListAdapter = ShoppingListAdapter(listaLista)
 
         val recyclerview = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerview.layoutManager = LinearLayoutManager(this)
@@ -76,12 +84,17 @@ class MainActivity : AppCompatActivity() {
         val clickListener = object :ShoppingListAdapter.ShoppingListClickListener{
             override fun onItemClick(pos: Int) {
                 val intent = Intent(applicationContext, DetalheActivity::class.java)
-                intent.putExtra("shoppinglistID", shoppingListAdapter.snapshots.getSnapshot(pos).id)
+                intent.putExtra("shoppinglist", shoppingListAdapter.shoppingList[pos])
                 startActivity(intent)
             }
         }
 
-        shoppingListAdapter.clickListener = clickListener
+        shoppingListAdapter.setClickListener(clickListener)
 
     }
+
+    private fun requisitarPermissaoListas() = permissaoListaArl.launch(arrayOf(
+        Manifest.permission.READ_CONTACTS,
+        Manifest.permission.WRITE_CONTACTS
+    ))
 }

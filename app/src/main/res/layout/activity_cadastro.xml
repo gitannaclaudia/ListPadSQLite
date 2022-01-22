@@ -74,21 +74,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
+        android:gravity="end"
         >
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/btBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_gravity="bottom|start"
-            android:gravity="center"
-            android:text="@string/voltar"
-            android:textColor="#273377"
-            app:backgroundTint="?attr/colorPrimary"
-            app:tint="#273377"
-            />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/btNext"
