@@ -17,18 +17,18 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val NOME = "nome"
         private const val DESCRICAO = "descricao"
         private const val DATA = "data"
-        private val ITEMS = MutableList<String>(1) { index -> (0).toString() }
+        private val ITEMS = MutableList<String>(1) { index -> index.toString() }
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val CREATE_TABLE = "CREATE TABLE $TABLE_NAME (" +
+        val createTable = "CREATE TABLE $TABLE_NAME (" +
                 "$ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$NOME TEXT, " +
                 "$DESCRICAO TEXT, " +
-                "$DATA TEXT, +" +
+                "$DATA TEXT, " +
                 "$ITEMS ARRAY)"
 
-        db?.execSQL(CREATE_TABLE)
+        db?.execSQL(createTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -64,8 +64,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         values.put(DESCRICAO, list.descricao)
         values.put(DATA, list.data)
         for (i in list.items.indices){
-            val ITEM = ""
-            ITEMS.add(values.put(ITEM, list.items[i]).toString())
+            val item = ""
+            ITEMS.add(values.put(item, list.items[i]).toString())
         }
 
         val result = db.update(TABLE_NAME, values, "id=?", arrayOf(list.id.toString()))

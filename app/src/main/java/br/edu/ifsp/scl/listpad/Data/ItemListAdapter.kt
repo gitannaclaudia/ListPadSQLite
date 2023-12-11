@@ -19,7 +19,6 @@ class ItemListAdapter(val itemList: MutableList<String>)
         this.clickListener = listener
     }
 
-
     inner class ItemListViewHolder(view: View):RecyclerView.ViewHolder(view)
     {
         val itemVH = view.findViewById<TextView>(R.id.itemTv)

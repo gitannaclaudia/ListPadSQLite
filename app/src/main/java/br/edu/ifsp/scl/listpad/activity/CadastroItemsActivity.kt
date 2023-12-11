@@ -19,7 +19,7 @@ class CadastroItemsActivity : AppCompatActivity() {
     private var shoppingList = ShoppingList()
     private val db = DatabaseHelper(this)
     lateinit var itemListAdapter: ItemListAdapter
-    var itemsStringList = mutableListOf<String>()
+    private var itemsStringList = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,8 +102,8 @@ class CadastroItemsActivity : AppCompatActivity() {
     }
 
     private fun initItemsList(list: MutableList<String>) {
-        for (indice in list) {
-            itemsList.add(indice)
+        for (index in list) {
+            itemsList.add(index)
         }
     }
 

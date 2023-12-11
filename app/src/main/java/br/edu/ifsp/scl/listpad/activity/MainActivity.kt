@@ -20,8 +20,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
-    val db = DatabaseHelper(this)
-    var listaLista = ArrayList<ShoppingList>()
+    private val db = DatabaseHelper(this)
+    private var listaLista = ArrayList<ShoppingList>()
     lateinit var shoppingListAdapter: ShoppingListAdapter
     private lateinit var permissaoListaArl: ActivityResultLauncher<Array<String>>
 

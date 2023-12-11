@@ -16,7 +16,7 @@ import br.edu.ifsp.scl.listpad.R
 import br.edu.ifsp.scl.listpad.model.ShoppingList
 
 class DetalheActivity : AppCompatActivity() {
-    val db = DatabaseHelper(this)
+    private val db = DatabaseHelper(this)
     private var shoppingList = ShoppingList()
     private var itemsList: MutableList<String> = mutableListOf()
     lateinit var itemListAdapter: ItemListAdapter
